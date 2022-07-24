@@ -6,4 +6,5 @@ type ParsedCronExpression struct {
 	DaysOfTheMonth []string
 	Months         []string
 	DaysOfTheWeek  []string
+	Command        string
 }

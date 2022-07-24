@@ -7,20 +7,10 @@ Other resources on cron expressions
 Cron expression generator - https://crontab.guru/
 Cron expression - https://en.wikipedia.org/wiki/Cron
 
-This program takes in a cron expression and outputs the parsed values in a tabular format mentioned below.
+This program takes in a cron expression and outputs the parsed values in a tabular format.
 
-**Input**
-
-*/15 0 1,15 * 1-5 /usr/bin/find
-
-**Output**
-
-minute              0 15 30 45
-hour                0
-day of month        1 15
-month               1 2 3 4 5 6 7 8 9 10 11 12
-day of week         1 2 3 4 5
-command             /usr/bin/find
+Input , output and tabular format can be found here -
+https://drive.google.com/file/d/1QmPHIZmHId7Shy-kpA0MmjJV1aDOY15s/view
 
 As per the problem statement , one of the constraints is as follows - 
 **The output should be formatted as a table with the field name taking the first 14 columns and the times as a space-separated list following it.**

@@ -10,7 +10,7 @@ import (
 )
 
 type CommonParser interface {
-	Parse(expression string, parser iParser.Parser) ([]string, error)
+	Parse(expression string, parser parser_interface.Parser) ([]string, error)
 }
 
 type commonParser struct {
@@ -20,7 +20,7 @@ func NewCommonParser() CommonParser {
 	return commonParser{}
 }
 
-func (cp commonParser) Parse(expression string, parser iParser.Parser) ([]string, error) {
+func (cp commonParser) Parse(expression string, parser parser_interface.Parser) ([]string, error) {
 
 	expressionRepresentation := representation.NewCronExpressionRepresentation()
 
@@ -51,7 +51,7 @@ func isAllValues(expression string) bool {
 	return expression == constant.AnyValueIdentifier
 }
 
-func buildAllValues(expressionRepresentation *representation.ExpressionRepresentation, parser iParser.Parser) []string {
+func buildAllValues(expressionRepresentation *representation.ExpressionRepresentation, parser parser_interface.Parser) []string {
 	expressionRepresentation.SetStart(parser.MinAllowedValue())
 	expressionRepresentation.SetEnd(parser.MaxAllowedValue())
 	expressionRepresentation.SetInterval(1)
@@ -100,7 +100,7 @@ func isListValuesApplicable(expression string) bool {
 	return strings.Contains(expression, constant.ListValueSeparator)
 }
 
-func extractListValues(expression string, expressionRepresentation *representation.ExpressionRepresentation, parser iParser.Parser) ([]string, error) {
+func extractListValues(expression string, expressionRepresentation *representation.ExpressionRepresentation, parser parser_interface.Parser) ([]string, error) {
 	listValues := strings.Split(expression, constant.ListValueSeparator)
 
 	for _, val := range listValues {
@@ -121,7 +121,7 @@ func extractListValues(expression string, expressionRepresentation *representati
 	return listValues, nil
 }
 
-func processSingularValue(expression string, expressionRepresentation *representation.ExpressionRepresentation, parser iParser.Parser) ([]string, error) {
+func processSingularValue(expression string, expressionRepresentation *representation.ExpressionRepresentation, parser parser_interface.Parser) ([]string, error) {
 	if expressionRepresentation.StepValueApplicable() {
 		if isAllValues(expression) {
 			expressionRepresentation.SetStart(parser.MinAllowedValue())

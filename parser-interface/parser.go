@@ -1,4 +1,4 @@
-package iParser
+package parser_interface
 
 type Parser interface {
 	IsValid(expression string) bool

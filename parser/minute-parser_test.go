@@ -2,6 +2,7 @@ package parser
 
 import (
 	"cron-expression-parser/mocks"
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -33,7 +34,7 @@ func TestMinuteParser_Parse_ShouldCallTheCommonParser_Once_WithGivenValues(t *te
 	for _, scenario := range scenarios {
 		mockCtrl := gomock.NewController(t)
 		mockCommonParser := mocks.NewMockCommonParser(mockCtrl)
-		mockCommonParser.EXPECT().Parse(scenario.minute, gomock.Any()).Return(scenario.expectedValue,nil)
+		mockCommonParser.EXPECT().Parse(scenario.minute, gomock.Any()).Return(scenario.expectedValue, nil)
 
 		minuteParser := NewMinuteParser(mockCommonParser)
 		actualValue, err := minuteParser.Parse(scenario.minute)
@@ -48,9 +49,9 @@ func TestMinuteParser_Parse_ShouldCallTheCommonParser_Thrice_AsThereAreThreeList
 
 	mockCtrl := gomock.NewController(t)
 	mockCommonParser := mocks.NewMockCommonParser(mockCtrl)
-	mockCommonParser.EXPECT().Parse("4", gomock.Any()).Return([]string{"4"},nil).Times(1)
-	mockCommonParser.EXPECT().Parse("5", gomock.Any()).Return([]string{"5"},nil).Times(1)
-	mockCommonParser.EXPECT().Parse("6", gomock.Any()).Return([]string{"6"},nil).Times(1)
+	mockCommonParser.EXPECT().Parse("4", gomock.Any()).Return([]string{"4"}, nil).Times(1)
+	mockCommonParser.EXPECT().Parse("5", gomock.Any()).Return([]string{"5"}, nil).Times(1)
+	mockCommonParser.EXPECT().Parse("6", gomock.Any()).Return([]string{"6"}, nil).Times(1)
 
 	minuteParser := NewMinuteParser(mockCommonParser)
 	actualValue, err := minuteParser.Parse(minute)
@@ -64,8 +65,8 @@ func TestMinuteParser_Parse_ShouldCallTheParserTwice_AsThereAreTwoListSeparatedV
 	minute := "2,3-7/2"
 	mockCtrl := gomock.NewController(t)
 	mockCommonParser := mocks.NewMockCommonParser(mockCtrl)
-	mockCommonParser.EXPECT().Parse("2", gomock.Any()).Return([]string{"2"},nil)
-	mockCommonParser.EXPECT().Parse("3-7/2", gomock.Any()).Return([]string{"3", "5", "7"},nil)
+	mockCommonParser.EXPECT().Parse("2", gomock.Any()).Return([]string{"2"}, nil)
+	mockCommonParser.EXPECT().Parse("3-7/2", gomock.Any()).Return([]string{"3", "5", "7"}, nil)
 
 	minuteParser := NewMinuteParser(mockCommonParser)
 	actualValue, err := minuteParser.Parse(minute)
@@ -89,4 +90,17 @@ func TestMinuteParser_MinAllowedValue_ShouldReturn_0(t *testing.T) {
 
 	minuteParser := NewMinuteParser(mockCommonParser)
 	assert.Equal(t, 0, minuteParser.MinAllowedValue())
+}
+
+func TestMinuteParser_Parse_ShouldReturnErrorWhenCommonParserReturnsAnError(t *testing.T) {
+	expression := "some-expression"
+	ctrl := gomock.NewController(t)
+	mockCommonParser := mocks.NewMockCommonParser(ctrl)
+	mockCommonParser.EXPECT().Parse(expression, gomock.Any()).Return([]string{}, errors.New("some error when parsing"))
+
+	minuteParser := NewMinuteParser(mockCommonParser)
+	_, actualErr := minuteParser.Parse(expression)
+
+	expectedErr := errors.New("some error when parsing")
+	assert.Equal(t, expectedErr, actualErr)
 }

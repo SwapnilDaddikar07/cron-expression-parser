@@ -2,6 +2,7 @@ package parser
 
 import (
 	"cron-expression-parser/mocks"
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -34,7 +35,7 @@ func TestDaysOfTheWeekParser_Parse_ShouldCallTheCommonParser_Once_AndReturnCombi
 	for _, scenario := range scenarios {
 		ctrl := gomock.NewController(t)
 		mockCommonParser := mocks.NewMockCommonParser(ctrl)
-		mockCommonParser.EXPECT().Parse(scenario.daysOfTheWeek, gomock.Any()).Return(scenario.expectedValue,nil)
+		mockCommonParser.EXPECT().Parse(scenario.daysOfTheWeek, gomock.Any()).Return(scenario.expectedValue, nil)
 
 		daysOfTheWeekParser := NewDaysOfTheWeekParser(mockCommonParser)
 		actualValue, err := daysOfTheWeekParser.Parse(scenario.daysOfTheWeek)
@@ -48,9 +49,9 @@ func TestDaysOfTheWeekParser_Parse_ShouldCallTheCommonParserThrice_AsThereAreThr
 	daysOfTheWeek := "3-4,6,7"
 	ctrl := gomock.NewController(t)
 	mockCommonParser := mocks.NewMockCommonParser(ctrl)
-	mockCommonParser.EXPECT().Parse("3-4", gomock.Any()).Return([]string{"3", "4"},nil)
-	mockCommonParser.EXPECT().Parse("6", gomock.Any()).Return([]string{"6"},nil)
-	mockCommonParser.EXPECT().Parse("7", gomock.Any()).Return([]string{"7"},nil)
+	mockCommonParser.EXPECT().Parse("3-4", gomock.Any()).Return([]string{"3", "4"}, nil)
+	mockCommonParser.EXPECT().Parse("6", gomock.Any()).Return([]string{"6"}, nil)
+	mockCommonParser.EXPECT().Parse("7", gomock.Any()).Return([]string{"7"}, nil)
 
 	daysOfTheWeekParser := NewDaysOfTheWeekParser(mockCommonParser)
 	actualValue, err := daysOfTheWeekParser.Parse(daysOfTheWeek)
@@ -74,4 +75,17 @@ func TestDaysOfTheWeekParser_MinAllowedValue_ShouldReturn_0(t *testing.T) {
 
 	daysOfTheWeekParser := NewDaysOfTheWeekParser(mockCommonParser)
 	assert.Equal(t, 0, daysOfTheWeekParser.MinAllowedValue())
+}
+
+func TestDaysOfTheWeekParser_Parse_ShouldReturnErrorWhenCommonParserReturnsAnError(t *testing.T) {
+	expression := "some-expression"
+	ctrl := gomock.NewController(t)
+	mockCommonParser := mocks.NewMockCommonParser(ctrl)
+	mockCommonParser.EXPECT().Parse(expression, gomock.Any()).Return([]string{}, errors.New("some error when parsing"))
+
+	daysOfTheWeekParser := NewDaysOfTheWeekParser(mockCommonParser)
+	_, actualErr := daysOfTheWeekParser.Parse(expression)
+
+	expectedErr := errors.New("some error when parsing")
+	assert.Equal(t, expectedErr, actualErr)
 }

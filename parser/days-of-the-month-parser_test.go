@@ -2,6 +2,7 @@ package parser
 
 import (
 	"cron-expression-parser/mocks"
+	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -74,4 +75,17 @@ func TestTestDaysOfTheMonthParser_MinAllowedValue_ShouldReturn_1(t *testing.T) {
 
 	daysOfTheMonthParser := NewDayOfTheMonthParser(mockCommonParser)
 	assert.Equal(t, 1, daysOfTheMonthParser.MinAllowedValue())
+}
+
+func TestDaysOfTheMonthParser_Parse_ShouldReturnErrorWhenCommonParserReturnsAnError(t *testing.T) {
+	expression := "some-expression"
+	ctrl := gomock.NewController(t)
+	mockCommonParser := mocks.NewMockCommonParser(ctrl)
+	mockCommonParser.EXPECT().Parse(expression, gomock.Any()).Return([]string{}, errors.New("some error when parsing"))
+
+	daysOfTheMonthParser := NewDayOfTheMonthParser(mockCommonParser)
+	_, actualErr := daysOfTheMonthParser.Parse(expression)
+
+	expectedErr := errors.New("some error when parsing")
+	assert.Equal(t, expectedErr, actualErr)
 }

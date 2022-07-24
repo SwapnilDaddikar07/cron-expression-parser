@@ -23,8 +23,9 @@ func (c *ConsoleWriter) Write(expression model2.ParsedCronExpression) error {
 	fmt.Printf(formatter, "minute", strings.Join(expression.Minutes, separator))
 	fmt.Printf(formatter, "hour", strings.Join(expression.Hours, separator))
 	fmt.Printf(formatter, "day of month", strings.Join(expression.DaysOfTheMonth, separator))
-	fmt.Printf(formatter, "month ", strings.Join(expression.Months, separator))
-	fmt.Printf(formatter, "day of week ", strings.Join(expression.DaysOfTheWeek, separator))
+	fmt.Printf(formatter, "month", strings.Join(expression.Months, separator))
+	fmt.Printf(formatter, "day of week", strings.Join(expression.DaysOfTheWeek, separator))
+	fmt.Printf(formatter, "command", expression.Command)
 	fmt.Println()
 	return nil
 }

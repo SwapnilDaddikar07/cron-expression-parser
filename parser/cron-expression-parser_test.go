@@ -19,35 +19,38 @@ func TestCronExpressionParser_BuildRawCronExpressionComponents_ShouldParseInputI
 	scenarios := []scenario{
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component ",
-			input: "1 2 3-4/2 4 4",
+			input: "1 2 3-4/2 4 4 /abc",
 			expectedValue: model.RawInput{
 				Minute:        "1",
 				Hour:          "2",
 				DayOfTheMonth: "3-4/2",
 				Month:         "4",
 				DayOfTheWeek:  "4",
+				Command:       "/abc",
 			},
 		},
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component and minute component ",
-			input: "1-2 2 3-4/2 4 4",
+			input: "1-2 2 3-4/2 4 4 /xyz",
 			expectedValue: model.RawInput{
 				Minute:        "1-2",
 				Hour:          "2",
 				DayOfTheMonth: "3-4/2",
 				Month:         "4",
 				DayOfTheWeek:  "4",
+				Command:       "/xyz",
 			},
 		},
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component and minute component and any value identifier",
-			input: "1-2 */2 3-4/2 2 4",
+			input: "1-2 */2 3-4/2 2 4 /usr/find",
 			expectedValue: model.RawInput{
 				Minute:        "1-2",
 				Hour:          "*/2",
 				DayOfTheMonth: "3-4/2",
 				Month:         "2",
 				DayOfTheWeek:  "4",
+				Command:       "/usr/find",
 			},
 		},
 	}
@@ -69,13 +72,14 @@ func TestCronExpressionParser_BuildRawCronExpressionComponents_ShouldParseInputI
 }
 
 func TestCronExpressionParser_Parse_CallRelevantParsersAnd_ReturnParsedCronExpression(t *testing.T) {
-	expression := "1-2 3 4-10/2 2 3-5"
+	expression := "1-2 3 4-10/2 2 3-5 /usr/bin/find"
 	expectedValue := model.ParsedCronExpression{
 		Minutes:        []string{"1", "2"},
 		Hours:          []string{"3"},
 		DaysOfTheMonth: []string{"4", "6", "8", "10"},
 		Months:         []string{"2"},
 		DaysOfTheWeek:  []string{"3", "4", "5"},
+		Command:        "/usr/bin/find",
 	}
 
 	ctrl := gomock.NewController(t)

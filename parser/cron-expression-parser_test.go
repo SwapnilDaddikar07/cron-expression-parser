@@ -13,14 +13,14 @@ func TestCronExpressionParser_BuildRawCronExpressionComponents_ShouldParseInputI
 	type scenario struct {
 		name          string
 		input         string
-		expectedValue model.RawCronExpressionComponents
+		expectedValue model.RawInput
 	}
 
 	scenarios := []scenario{
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component ",
 			input: "1 2 3-4/2 4 4",
-			expectedValue: model.RawCronExpressionComponents{
+			expectedValue: model.RawInput{
 				Minute:        "1",
 				Hour:          "2",
 				DayOfTheMonth: "3-4/2",
@@ -31,7 +31,7 @@ func TestCronExpressionParser_BuildRawCronExpressionComponents_ShouldParseInputI
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component and minute component ",
 			input: "1-2 2 3-4/2 4 4",
-			expectedValue: model.RawCronExpressionComponents{
+			expectedValue: model.RawInput{
 				Minute:        "1-2",
 				Hour:          "2",
 				DayOfTheMonth: "3-4/2",
@@ -42,7 +42,7 @@ func TestCronExpressionParser_BuildRawCronExpressionComponents_ShouldParseInputI
 		{
 			name:  "a random valid cron expression with 5 spaces, combination of range and step in days of the month component and minute component and any value identifier",
 			input: "1-2 */2 3-4/2 2 4",
-			expectedValue: model.RawCronExpressionComponents{
+			expectedValue: model.RawInput{
 				Minute:        "1-2",
 				Hour:          "*/2",
 				DayOfTheMonth: "3-4/2",

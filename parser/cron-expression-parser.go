@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"cron-expression-parser/parser-interface"
 	"cron-expression-parser/model"
+	"cron-expression-parser/parser-interface"
 	"errors"
 	"strings"
 )

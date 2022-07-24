@@ -7,18 +7,6 @@ Other resources on cron expressions
 Cron expression generator - https://crontab.guru/
 Cron expression - https://en.wikipedia.org/wiki/Cron
 
-Cron expression format 
-
-# ┌───────────── minute (0 - 59)
-# │ ┌───────────── hour (0 - 23)
-# │ │ ┌───────────── day of the month (1 - 31)
-# │ │ │ ┌───────────── month (1 - 12)
-# │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday;
-# │ │ │ │ │                                   7 is also Sunday on some systems)
-# │ │ │ │ │
-# │ │ │ │ │
-# * * * * * <command to execute>
-
 This program takes in a cron expression and outputs the parsed values in a tabular format mentioned below.
 
 **Input**
@@ -74,12 +62,12 @@ CronExpressionParser --> IndividualParsers(minute/hour/day etc) --> CommonParser
 
 **Algorithm**
 
-1. First preference given to "*".
-   If the component contains just a "*" (any identifier) , the code fetches the min and max value from respective parser and collect all values.
+1. First preference given to *.
+   If the component contains just a * (any identifier) , the code fetches the min and max value from respective parser and collect all values.
 
 2. An expression which contains a "/" i.e (step identifier) will always be accompanied by another identifier.
    Example [2-3/2] here **/2** is the step identifier accompanied by a range identifier.
-   [*/2] here **/2** is the step identifier accompanied by a "*" (any identifier)
+   [*/2] here **/2** is the step identifier accompanied by a * (any identifier)
 
 3. So if a step identifier is present , the code parses the expression and remember the step value.
 
@@ -93,9 +81,9 @@ CronExpressionParser --> IndividualParsers(minute/hour/day etc) --> CommonParser
    If step identifier is not present , the code will simply include comma separated values in the output.
 
 6. Finally , if there is no split identifier or a list identifier , it means there is a singular value.
-   The singular value can either be any identifier ("*") or just a number.
+   The singular value can either be any identifier * or just a number.
    If the single value is just a number and step value was not encountered previously , the code will return the single number back.
-   If a step value was encountered previously and the singular value is "*" , the program will find the starting point and ending range by calling respective parser.
+   If a step value was encountered previously and the singular value is * , the program will find the starting point and ending range by calling respective parser.
    The step value will be used as the incrementing factor.
    If the single value is a number and step value was encountered , the number will be used as starting point. The ending range will be found by calling respective parser.
 

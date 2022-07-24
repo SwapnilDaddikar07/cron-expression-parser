@@ -20,10 +20,6 @@ func NewDayOfTheMonthParser(commonParser parser.CommonParser) parser_interface.P
 	return dayOfTheMonthParser{commonParser: commonParser}
 }
 
-func (m dayOfTheMonthParser) IsValid(daysOfTheMonth string) bool {
-	return true
-}
-
 func (m dayOfTheMonthParser) Parse(daysOfTheMonthComponent string) ([]string, error) {
 	result := make([]string, 0)
 	for _, individualComponent := range strings.Split(daysOfTheMonthComponent, constant.ListValueSeparator) {

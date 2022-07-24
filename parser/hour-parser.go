@@ -20,10 +20,6 @@ func NewHourParser(commonParser parser.CommonParser) parser_interface.Parser {
 	return hourParser{commonParser: commonParser}
 }
 
-func (m hourParser) IsValid(hour string) bool {
-	return true
-}
-
 func (m hourParser) Parse(hourComponent string) ([]string, error) {
 	result := make([]string, 0)
 	for _, individualComponent := range strings.Split(hourComponent, constant.ListValueSeparator) {

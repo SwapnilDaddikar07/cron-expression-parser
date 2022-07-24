@@ -20,10 +20,6 @@ func NewMinuteParser(commonParser parser.CommonParser) parser_interface.Parser {
 	return minuteParser{commonParser: commonParser}
 }
 
-func (m minuteParser) IsValid(minute string) bool {
-	return true
-}
-
 func (m minuteParser) Parse(minuteComponent string) ([]string, error) {
 	result := make([]string, 0)
 

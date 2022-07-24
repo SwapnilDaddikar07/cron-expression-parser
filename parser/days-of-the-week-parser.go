@@ -20,10 +20,6 @@ func NewDaysOfTheWeekParser(commonParser parser.CommonParser) parser_interface.P
 	return daysOfTheWeekParser{commonParser: commonParser}
 }
 
-func (w daysOfTheWeekParser) IsValid(daysOfTheWeekParser string) bool {
-	return true
-}
-
 func (w daysOfTheWeekParser) Parse(daysOfTheWeekComponent string) ([]string, error) {
 	result := make([]string, 0)
 	for _, individualComponent := range strings.Split(daysOfTheWeekComponent, constant.ListValueSeparator) {

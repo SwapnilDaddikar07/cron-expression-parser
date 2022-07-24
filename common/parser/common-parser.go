@@ -5,6 +5,7 @@ import (
 	"cron-expression-parser/constant"
 	"cron-expression-parser/parser-interface"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -31,7 +32,7 @@ func (cp commonParser) Parse(expression string, parser parser_interface.Parser) 
 	if isStepValueApplicable(expression) {
 		modifiedExpression, parseErr := extractIntervalAndModifyExpression(expression, expressionRepresentation)
 		if parseErr != nil {
-			return []string{}, parseErr
+			return nil, parseErr
 		}
 		expression = modifiedExpression
 	}
@@ -66,7 +67,8 @@ func extractIntervalAndModifyExpression(expression string, expressionRepresentat
 	stepValueIdentifierIndex := strings.LastIndex(expression, constant.StepValuesIdentifier)
 	interval, parseErr := strconv.ParseInt(expression[stepValueIdentifierIndex+1:], 10, 0)
 	if parseErr != nil {
-		return "", errors.New("cannot parse given expression as it is invalid " + expression)
+		errMsg := fmt.Sprintf("cannot parse given expression as it is invalid.Expression - %s", expression)
+		return "", errors.New(errMsg)
 	}
 	expressionRepresentation.SetInterval(int(interval))
 	expressionRepresentation.SetIsStepApplicable(true)
@@ -85,7 +87,8 @@ func extractRange(expression string, expressionRepresentation *representation.Ex
 	rangeEnd, parseErr := strconv.ParseInt(rangeValues[1], 10, 0)
 
 	if parseErr != nil {
-		return []string{}, errors.New("not a valid cron expression " + expression)
+		errMsg := fmt.Sprintf("cannot parse given expression as it is invalid. Expression - %s", expression)
+		return nil, errors.New(errMsg)
 	}
 
 	if !expressionRepresentation.StepValueApplicable() {
@@ -106,7 +109,8 @@ func extractListValues(expression string, expressionRepresentation *representati
 	for _, val := range listValues {
 		_, parseErr := strconv.ParseInt(val, 10, 0)
 		if parseErr != nil {
-			return nil, errors.New("cannot parse expression " + expression)
+			errMsg := fmt.Sprintf("cannot parse given expression as it is invalid. Expression - %s", expression)
+			return nil, errors.New(errMsg)
 		}
 	}
 
@@ -130,7 +134,8 @@ func processSingularValue(expression string, expressionRepresentation *represent
 		}
 		start, parseErr := strconv.ParseInt(expression, 10, 0)
 		if parseErr != nil {
-			return nil, errors.New("cannot parse expression " + expression)
+			errMsg := fmt.Sprintf("cannot parse given expression as it is invalid. Expression - %s", expression)
+			return nil, errors.New(errMsg)
 		}
 		expressionRepresentation.SetStart(int(start))
 		expressionRepresentation.SetEnd(parser.MaxAllowedValue())
@@ -138,7 +143,8 @@ func processSingularValue(expression string, expressionRepresentation *represent
 	}
 	_, parseErr := strconv.ParseInt(expression, 10, 0)
 	if parseErr != nil {
-		return nil, errors.New("cannot parse expression " + expression)
+		errMsg := fmt.Sprintf("cannot parse given expression as it is invalid. Expression - %s", expression)
+		return nil, errors.New(errMsg)
 	}
 	return []string{expression}, nil
 }

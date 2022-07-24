@@ -136,5 +136,9 @@ func processSingularValue(expression string, expressionRepresentation *represent
 		expressionRepresentation.SetEnd(parser.MaxAllowedValue())
 		return expressionRepresentation.Execute(), nil
 	}
+	_, parseErr := strconv.ParseInt(expression, 10, 0)
+	if parseErr != nil {
+		return nil, errors.New("cannot parse expression " + expression)
+	}
 	return []string{expression}, nil
 }

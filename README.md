@@ -9,9 +9,6 @@ Cron expression - https://en.wikipedia.org/wiki/Cron
 
 This program takes in a cron expression and outputs the parsed values in a tabular format.
 
-As per the problem statement , one of the constraints is as follows - 
-**The output should be formatted as a table with the field name taking the first 14 columns and the times as a space-separated list following it.**
-
 Additional libraries used
 **gomock**  - https://github.com/golang/mock (A library for creating mocks. Helps in unit testing)
 **testify** - https://github.com/stretchr/testify (A library to gracefully handle assertions in unit tests.)
